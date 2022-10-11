@@ -14,7 +14,7 @@ class MonthlyGraphs extends StatelessWidget {
 
   _page(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        margin: const EdgeInsets.symmetric( vertical: 20),
         width: double.infinity,
         child: BlocBuilder<MonthlyReadingsBloc, MonthlyReadingsState>(
             builder: (context, state) {

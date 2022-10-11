@@ -38,8 +38,8 @@ class EnergyReadings extends StatelessWidget {
                     showMonthYearPicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2019),
-                      lastDate: DateTime(2023),
+                      firstDate: DateTime.now().subtract(const Duration(days: 356*15)),
+                      lastDate: DateTime.now().add(const Duration(days: 356)),
                     )
                         .then((value) =>
                     temp.month = value.toString().split(" ")[0])

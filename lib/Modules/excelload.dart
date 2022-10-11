@@ -229,19 +229,25 @@ Map readEnergymonthly(Excel excel, String table) {
       .toString();
 
   for (int i = 11; i < maxRows; i++) {
+    print(excel.tables[table]!
+        .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i))
+        .value);
     String month = excel.tables[table]!
         .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i))
         .value
         .toString()
         .split("T")[0];
+    print(month);
     String usage = excel.tables[table]!
         .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i))
         .value
         .toString();
+    print(usage);
     String cost = excel.tables[table]!
         .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: i))
         .value
         .toString();
+    print(cost);
     output["data"].add(MonthlyModel(cost: int.parse(cost), month: month, usage: int.parse(usage)));
   }
   return output;

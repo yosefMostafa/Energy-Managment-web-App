@@ -1,6 +1,7 @@
 import 'package:companywebapp/Models/MonthlyModel.dart';
 import 'package:companywebapp/Widgets/constantWidgets/Type_select.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -54,9 +55,9 @@ class _MonthlyGraphsCardState extends State<MonthlyGraphsCard> {
       crossAxisAlignment: WrapCrossAlignment.center,
       // crossAxisAlignment: WrapCrossAlignment.,
       children: [
-
-        Text("Type: ${BlocProvider.of<MonthlyReadingsBloc>(context).types.singleWhere((element) => element.id==widget.data[0].type).name}",
-            style: const TextStyle(fontWeight: FontWeight.bold),
+        Text(
+          "Type: ${BlocProvider.of<MonthlyReadingsBloc>(context).types.singleWhere((element) => element.id == widget.data[0].type).name}",
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -111,23 +112,21 @@ class _MonthlyGraphsCardState extends State<MonthlyGraphsCard> {
             Flexible(
               flex: si.isMobile ? 0 : 1,
               child: SfCartesianChart(
-
                   enableAxisAnimation: true,
                   primaryXAxis: DateTimeAxis(
-
-                    title: AxisTitle(
-                      text: 'Month',
-                    )
-                  ),
-                  primaryYAxis:NumericAxis(
-                    title: AxisTitle(
-                      text: _selectedydata +(_selectedydata=='cost'?' (USD)':' kWh')
-                    )
-                  ) ,
+                      dateFormat: DateFormat.MMM(),
+                      title: AxisTitle(
+                        text: 'Month',
+                      )),
+                  primaryYAxis: NumericAxis(
+                    numberFormat: NumberFormat.compact(),
+                      title: AxisTitle(
+                          text: _selectedydata +
+                              (_selectedydata == 'cost' ? ' (USD)' : ' kWh'))),
                   title: ChartTitle(
                       text: 'Yearly Readings chart (Month) vs $_selectedydata'),
                   series: <ChartSeries<MonthlyModel, dynamic>>[
-                    ScatterSeries<MonthlyModel, dynamic>(
+                    ColumnSeries<MonthlyModel, dynamic>(
                         dataSource: viewedList,
                         xValueMapper: (MonthlyModel data, _) =>
                             toDateTime(data.month),

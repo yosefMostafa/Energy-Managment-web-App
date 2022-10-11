@@ -19,7 +19,7 @@ class SEUSGraphs extends StatelessWidget {
   _page(BuildContext context) {
     return Container(
       height: hieght,
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+
         width: double.infinity,
         child: BlocBuilder<SeusBloc, SeusState>(builder: (context, state) {
           if (state is SEUsLoadingState) {

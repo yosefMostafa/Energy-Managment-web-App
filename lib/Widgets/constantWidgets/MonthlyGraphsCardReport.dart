@@ -1,6 +1,7 @@
 import 'package:companywebapp/Models/MonthlyModel.dart';
 import 'package:companywebapp/Widgets/constantWidgets/Type_select.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -11,10 +12,12 @@ import '../../Modules/Convertions.dart';
 class MonthlyGraphsCardReport extends StatefulWidget {
   final List<MonthlyModel> data;
   final String year;
-  const MonthlyGraphsCardReport(this.data,this.year, {Key? key}) : super(key: key);
+  const MonthlyGraphsCardReport(this.data, this.year, {Key? key})
+      : super(key: key);
 
   @override
-  State<MonthlyGraphsCardReport> createState() => _MonthlyGraphsCardReportState();
+  State<MonthlyGraphsCardReport> createState() =>
+      _MonthlyGraphsCardReportState();
 }
 
 class _MonthlyGraphsCardReportState extends State<MonthlyGraphsCardReport> {
@@ -30,22 +33,19 @@ class _MonthlyGraphsCardReportState extends State<MonthlyGraphsCardReport> {
   }
 
   getViewdList() {
-
-
     viewedList = widget.data
         .where((element) => element.month.split("-")[0] == widget.year)
         .toList();
     print(viewedList);
   }
 
-  didUpdateWidget(MonthlyGraphsCardReport t){
-super.didUpdateWidget(t);
-viewedList = widget.data
-    .where((element) => element.month.split("-")[0] == widget.year)
-    .toList();
-print(viewedList);
+  didUpdateWidget(MonthlyGraphsCardReport t) {
+    super.didUpdateWidget(t);
+    viewedList = widget.data
+        .where((element) => element.month.split("-")[0] == widget.year)
+        .toList();
+    print(viewedList);
   }
-
 
   _getHeaders() {
     return Wrap(
@@ -54,21 +54,20 @@ print(viewedList);
       crossAxisAlignment: WrapCrossAlignment.center,
       // crossAxisAlignment: WrapCrossAlignment.,
       children: [
-
-        Text("Type: ${BlocProvider.of<MonthlyReadingsBloc>(context).types.singleWhere((element) => element.id==widget.data[0].type).name}",
+        Text(
+          "Type: ${BlocProvider.of<MonthlyReadingsBloc>(context).types.singleWhere((element) => element.id == widget.data[0].type).name}",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-             Text("year: ${widget.year}"),
-
+            Text("year: ${widget.year}"),
           ],
         ),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: const [
-             Text("ydata: cost & usage"),
+            Text("ydata: cost & usage"),
           ],
         )
       ],
@@ -92,39 +91,36 @@ print(viewedList);
             Flexible(
               flex: si.isMobile ? 0 : 1,
               child: SfCartesianChart(
-legend: Legend(
-    isVisible:true,
-  position: LegendPosition.bottom,
-),
+                  legend: Legend(
+                    isVisible: true,
+                    position: LegendPosition.bottom,
+                  ),
                   selectionType: SelectionType.series,
                   enableAxisAnimation: true,
                   primaryXAxis: DateTimeAxis(
-
                       title: AxisTitle(
-                        text: 'year',
-                      )
-                  ),
-                  primaryYAxis:NumericAxis(
+                    text: 'year',
+                  )),
+                  primaryYAxis: NumericAxis(
+                      numberFormat: NumberFormat.compact(),
                       title: AxisTitle(
-                          text: "cost & usage",
-                      )
-                  ) ,
-
-                  series:
-                    allydata.map<ChartSeries<MonthlyModel, dynamic>>((e) => ScatterSeries<MonthlyModel, dynamic>(
-                      selectionBehavior: SelectionBehavior(
-                        enable: true,
-                      ),
-                        dataSource: viewedList,
-                        xValueMapper: (MonthlyModel data, _) =>
-                            toDateTime(data.month),
-                        yValueMapper: (MonthlyModel data, _) =>
-                        e == 'cost' ? data.cost : data.usage,
-                        name: e,
-                        // Enable data label
-                       )).toList()
-
-                  ),
+                    text: "cost & usage",
+                  )),
+                  series: allydata
+                      .map<ChartSeries<MonthlyModel, dynamic>>(
+                          (e) => StackedColumnSeries<MonthlyModel, dynamic>(
+                                selectionBehavior: SelectionBehavior(
+                                  enable: true,
+                                ),
+                                dataSource: viewedList,
+                                xValueMapper: (MonthlyModel data, _) =>
+                                    toDateTime(data.month),
+                                yValueMapper: (MonthlyModel data, _) =>
+                                    e == 'cost' ? data.cost : data.usage,
+                                name: e,
+                                // Enable data label
+                              ))
+                      .toList()),
             ),
           ]);
         }),
